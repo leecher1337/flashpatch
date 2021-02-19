@@ -16,3 +16,11 @@ Depending on whether you are on x86 or x64 System, download flashpatch_x86.exe o
 If you just want to look in the default locations and patch Flash installation there, simply run the .exe
 If you want to scan a certain directory or patch a specifig file, specify it as a commandline parameter.
 
+# What to do with Internet Explorer 11?
+It may be that you need to re-register Flash in order to get Flash working with IE11
+Open cmd.exe Shell (on 64bit OS in 64bit Mode) as Administrator and:
+
+```
+regsvr32 %systemroot%\SysWOW64\Macromed\Flash\flash.ocx
+regsvr32 %systemroot%\System32Macromed\Flash\flash.ocx
+```
