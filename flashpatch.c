@@ -27,10 +27,10 @@ static BOOL EnablePrivilege (HANDLE hProcess, LPCTSTR lpPrivilegeName);
 
 static int ScanFlashFolder(int nFolder)
 {
-	char szDir[MAX_PATH+16], *p, *pszDir = szDir+9;
+	char szDir[MAX_PATH+16], *p, *pszDir = szDir+12;
 	int nFiles = 0;
 
-	strcpy(szDir, "regsvr32 ");
+	strcpy(szDir, "regsvr32 /s ");
 	if (SHGetSpecialFolderPath(NULL, pszDir, nFolder, FALSE))
 	{
 		strcat(pszDir, "\\Macromed\\Flash");
@@ -38,7 +38,11 @@ static int ScanFlashFolder(int nFolder)
 		nFiles += ScanFolder(pszDir);
 		strcpy(p, "\\flash.ocx");
 		if (GetFileAttributes(pszDir) != INVALID_FILE_ATTRIBUTES)
+		{
+			printf ("Registering %s...", pszDir);
 			WinExec(szDir, SW_HIDE);
+			printf ("OK\n");
+		}
 	}
 	return nFiles;
 }
@@ -262,7 +266,7 @@ int main(int argc, char **argv)
 {
 	int ret;
 
-	printf ("Adobe Flash Timebomb patcher V1.00, leecher@dose.0wnz.at 02/2021\n\n");
+	printf ("Adobe Flash Timebomb patcher V1.01, leecher@dose.0wnz.at 02/2021\n\n");
 
 	EnablePrivilege (GetCurrentProcess(), SE_BACKUP_NAME);
 	EnablePrivilege (GetCurrentProcess(), SE_RESTORE_NAME);
