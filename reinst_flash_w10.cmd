@@ -16,8 +16,8 @@ goto fini
 :noflash
 rem Ensure that we are run from 64bit prompt
 if "%ProgramFiles(x86)%" == "" goto StartExec
-if not exist %SystemRoot%\Sysnative\cmd.exe goto StartExec
-%SystemRoot%\Sysnative\cmd.exe /C "%~f0" %*
+if not exist %SystemRoot%\System32\cmd.exe goto StartExec
+%SystemRoot%\System32\cmd.exe /C "%~f0" %*
 exit /b
 :StartExec
 >nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
