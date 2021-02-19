@@ -25,24 +25,33 @@ static BOOL PatchFile(char *pszFile);
 static BOOL ShowError(LPSTR pszError);
 static BOOL EnablePrivilege (HANDLE hProcess, LPCTSTR lpPrivilegeName);
 
+static int ScanFlashFolder(int nFolder)
+{
+	char szDir[MAX_PATH+16], *p, *pszDir = szDir+9;
+	int nFiles = 0;
+
+	strcpy(szDir, "regsvr32 ");
+	if (SHGetSpecialFolderPath(NULL, pszDir, nFolder, FALSE))
+	{
+		strcat(pszDir, "\\Macromed\\Flash");
+		p = pszDir + strlen(pszDir);
+		nFiles += ScanFolder(pszDir);
+		strcpy(p, "\\flash.ocx");
+		if (GetFileAttributes(pszDir) != INVALID_FILE_ATTRIBUTES)
+			WinExec(szDir, SW_HIDE);
+	}
+	return nFiles;
+}
+
 static int LocateExes(void)
 {
 	char szDir[MAX_PATH], *p;
 	int nFiles = 0;
 
 	printf ("Scanning...\n");
-	if (SHGetSpecialFolderPath(NULL, szDir, CSIDL_SYSTEM, FALSE))
-	{
-		strcat(szDir, "\\Macromed\\Flash");
-		nFiles += ScanFolder(szDir);
-	}
-
+	nFiles += ScanFlashFolder(CSIDL_SYSTEM);
 #ifdef _WIN64
-	if (SHGetSpecialFolderPath(NULL, szDir, CSIDL_SYSTEMX86, FALSE))
-	{
-		strcat(szDir, "\\Macromed\\Flash");
-		nFiles += ScanFolder(szDir);
-	}
+	nFiles += ScanFlashFolder(CSIDL_SYSTEMX86);
 #endif
 	if (SHGetSpecialFolderPath(NULL, szDir, CSIDL_LOCAL_APPDATA, FALSE))
 	{
@@ -127,7 +136,7 @@ static BOOL PatchFile(char *pszFile)
 	HANDLE hFile;
 	BOOL bRet=FALSE;
 	BYTE Timestamp[] = {0x00, 0x00, 0x40, 0x46, 0x3E, 0x6F, 0x77, 0x42};
-	BYTE Infinity[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x7F};
+	BYTE Infinity[]  = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x7F};
 	PBYTE lpSig, lpMem;
 
 	printf ("Checking %s....", pszFile);

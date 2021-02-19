@@ -8,7 +8,7 @@ https://gist.github.com/KuromeSan/56d8b724c0696b54f9f81994ae3591d1
 
 Unfortunately, I only found patchers for the timebomb that were written in .NET.
 Now I definitely don't want to pollute my system with .NET Framework and the patcher above didn't even work properly on Windows XP.
-So I decided to write my own little patcher that is just a tiny executable wihout any dependencies.
+So I decided to write my own little patcher that is just a tiny executable without any dependencies.
 It is based on the work mentioned above.
 
 # How to use?
@@ -16,11 +16,7 @@ Depending on whether you are on x86 or x64 System, download flashpatch_x86.exe o
 If you just want to look in the default locations and patch Flash installation there, simply run the .exe
 If you want to scan a certain directory or patch a specifig file, specify it as a commandline parameter.
 
-# What to do with Internet Explorer 11?
-It may be that you need to re-register Flash in order to get Flash working with IE11
-Open cmd.exe Shell (on 64bit OS in 64bit Mode) as Administrator and:
-
-```
-regsvr32 %systemroot%\SysWOW64\Macromed\Flash\flash.ocx
-regsvr32 %systemroot%\System32\Macromed\Flash\flash.ocx
-```
+# How to reinstall flash after KB4577586 removed it?
+On Windows 7 and below, just download and install it from the sites mentioned [here](https://gist.github.com/KuromeSan/56d8b724c0696b54f9f81994ae3591d1#finally)
+On Windows 10, you need to download the latest Flash player from KB4580325 and reinstall its contents.
+For this, download reinst_flash_w10.cmd to the same directory as the flashpatch_???.exe files and run it, it downloads mentioned updated flash version and copies it to System directory again.
