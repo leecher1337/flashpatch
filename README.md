@@ -22,5 +22,5 @@ Open cmd.exe Shell (on 64bit OS in 64bit Mode) as Administrator and:
 
 ```
 regsvr32 %systemroot%\SysWOW64\Macromed\Flash\flash.ocx
-regsvr32 %systemroot%\System32Macromed\Flash\flash.ocx
+regsvr32 %systemroot%\System32\Macromed\Flash\flash.ocx
 ```
