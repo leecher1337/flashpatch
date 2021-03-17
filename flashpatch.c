@@ -165,7 +165,16 @@ static BOOL PatchFile(char *pszFile)
 					bRet = TRUE;
 				}
 				else
-					printf("Signature not found\n");
+				{
+					if (Match(lpMem, dwSize, Infinity, sizeof(Infinity), 1))
+					{
+						printf("May already be patched\n");
+					}
+					else
+					{
+						printf("Signature not found\n");
+					}
+				}
 				UnmapViewOfFile (lpMem);
 			}
 			else
