@@ -141,6 +141,7 @@ static BOOL PatchFile(char *pszFile)
 	BOOL bRet=FALSE;
 	BYTE Timestamp[] = {0x00, 0x00, 0x40, 0x46, 0x3E, 0x6F, 0x77, 0x42};
 	BYTE Infinity[]  = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x7F};
+	BYTE TSFarAway[] = {0xC0, 0xFF, 0x8F, 0x1E, 0xC4, 0xBC, 0xD6, 0x42};
 	PBYTE lpSig, lpMem;
 
 	printf ("Checking %s....", pszFile);
@@ -166,13 +167,24 @@ static BOOL PatchFile(char *pszFile)
 				}
 				else
 				{
-					if (Match(lpMem, dwSize, Infinity, sizeof(Infinity), 1))
+					if (lpSig = Match(lpMem, dwSize, Infinity, sizeof(Infinity), 1))
 					{
-						printf("May already be patched\n");
+						char szMsg[32];
+
+						sprintf(szMsg, "Found old inifinty @%X\n", lpSig-lpMem);
+						print_ok(szMsg);
+						bRet = TRUE;
 					}
 					else
 					{
-						printf("Signature not found\n");
+						if (Match(lpMem, dwSize, TSFarAway, sizeof(TSFarAway), 1))
+						{
+							printf("May already be patched\n");
+						}
+						else
+						{
+							printf("Signature not found\n");
+						}
 					}
 				}
 				UnmapViewOfFile (lpMem);
@@ -210,7 +222,7 @@ static BOOL PatchFile(char *pszFile)
 			{
 				DWORD dwWritten;
 
-				if ((bRet = WriteFile(hFile, Infinity, sizeof(Infinity), &dwWritten, NULL)))
+				if ((bRet = WriteFile(hFile, TSFarAway, sizeof(TSFarAway), &dwWritten, NULL)))
 				{
 					print_ok("OK\n");
 				}
@@ -275,7 +287,7 @@ int main(int argc, char **argv)
 {
 	int ret;
 
-	printf ("Adobe Flash Timebomb patcher V1.01, leecher@dose.0wnz.at 02/2021\n\n");
+	printf ("Adobe Flash Timebomb patcher V1.02, leecher@dose.0wnz.at 02/2021\n\n");
 
 	EnablePrivilege (GetCurrentProcess(), SE_BACKUP_NAME);
 	EnablePrivilege (GetCurrentProcess(), SE_RESTORE_NAME);
