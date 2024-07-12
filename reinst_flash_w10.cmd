@@ -87,6 +87,7 @@ copy /y flash.ocx %systemroot%\%1\Macromed\Flash\
 copy /y flashutil_activex.dll %systemroot%\%1\Macromed\Flash\
 copy /y flashutil_activex.exe %systemroot%\%1\Macromed\Flash\
 copy /y activex.vch %systemroot%\%1\Macromed\Flash\
+regsvr32 /s %systemroot%\%1\Macromed\Flash\flash.ocx
 exit /B
 
 :fini
